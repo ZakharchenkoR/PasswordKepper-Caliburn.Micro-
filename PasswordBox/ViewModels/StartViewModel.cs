@@ -52,8 +52,6 @@ namespace PasswordBox.ViewModels
         public StartViewModel(IWindowManager windowManager)
         {
             this.windowManager = windowManager;
-            accounts = Account.GetAccounts();
-            passwordKeepers = PasswordKeeper.GetPasswordKeepers();
             LoadCommand = new RelayCommand(Load);
         }
 
@@ -72,6 +70,7 @@ namespace PasswordBox.ViewModels
                     {
                         if(id == it.ID)
                         {
+                            MessageBox.Show(it.ID.ToString());
                             Singleton singleton = Singleton.GetInstance();
                             singleton.ID = id;
                             windowManager.ShowWindow(new ClientViewModel());
@@ -87,20 +86,32 @@ namespace PasswordBox.ViewModels
 
         public void AddClient(string login, string password)
         {
+            foreach (var item in accounts)
+            {
+                if(this.Login == item.Login)
+                {
+                    MessageBox.Show("Such login already exists");
+                    return;
+                }
+            }
+
+
             accounts.Add(new Account { Password = this.Password, Login = this.Login, ID = this.ID });
             passwordKeepers.Add(new PasswordKeeper { ID = this.ID });
+            string passwords = JsonConvert.SerializeObject(accounts);
+            File.WriteAllText("Passwords.json", passwords, Encoding.Default);
+            string content = JsonConvert.SerializeObject(passwordKeepers);
+            File.WriteAllText("PasswordKepper.json", content, Encoding.Default);
+            Singleton singleton = Singleton.GetInstance();
+            singleton.ID = ID;
             this.ID++;
             string account_id = JsonConvert.SerializeObject(ID);
             File.WriteAllText("data.json", account_id, Encoding.Default);
-
-            MessageBoxResult result = MessageBox.Show("Do you want go to your accaunt?",
-                                          "Registration successful!",
-                                          MessageBoxButton.YesNo,
-                                          MessageBoxImage.Question);
+            MessageBoxResult result = MessageBox.Show("Do you want go to your accaunt?", "Registration successful!", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
-                Singleton singleton = Singleton.GetInstance();
-                singleton.ID = ID;
+                
+                MessageBox.Show(singleton.ID.ToString());
                 windowManager.ShowWindow(new ClientViewModel());
             }
             else
@@ -113,8 +124,10 @@ namespace PasswordBox.ViewModels
         public void Load(object a)
         {
             ID = JsonConvert.DeserializeObject<int>(File.ReadAllText("data.json"));
-            MessageBox.Show(ID.ToString());
-           
+            accounts = JsonConvert.DeserializeObject<List<Account>>(File.ReadAllText("Passwords.json"));
+            passwordKeepers = JsonConvert.DeserializeObject<List<PasswordKeeper>>(File.ReadAllText("PasswordKepper.json"));
+            
+
         }
 
     }

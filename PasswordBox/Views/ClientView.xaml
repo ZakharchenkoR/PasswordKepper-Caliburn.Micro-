@@ -37,78 +37,82 @@
             </Grid>
 
             <Grid x:Name="GridMenu" Width="200" HorizontalAlignment="Left" Background="#FF2843BD">
-                <StackPanel>
-                    <Grid Height="150" Background="White" >
-                        <Button x:Name="ButtonClosedMenu" Width="60" Height="60" Background="{x:Null}"
-                                BorderBrush="{x:Null}"
-                                VerticalAlignment="Top" HorizontalAlignment="Right" >
-                            <materialDesign:PackIcon Foreground="#FF2843BD"
-                                                     Kind="ArrowLeft"
-                                                     Width="25"
-                                                     Height="25"
-                                                     ></materialDesign:PackIcon>
-                        </Button>
-                    </Grid>
-                    <ListView Foreground="Black">
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="ViewDashboard" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="Pencil" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="AccessAlarms" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="Radar" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="DeathlyHallows" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="MediaNetwork" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-                        <ListViewItem Height="60">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon  Kind="Face" Width="25" Height="25" VerticalAlignment="Center"/>
-                                <TextBlock Text="Test" VerticalAlignment="Center" Margin="20,10"></TextBlock>
-                            </StackPanel>
-                        </ListViewItem>
-
-                    </ListView>
-                </StackPanel>
-                
+                <ListView Foreground="Black">
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon  Kind="ViewDashboard" Width="25" Height="25" VerticalAlignment="Center"/>
+                            <TextBlock Text="Add" VerticalAlignment="Center" Margin="20,10"></TextBlock>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+                <Grid Margin="0,50,0,290">
+                    <StackPanel >
+                        <Label FontSize="15" Content="Web Servis"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding WebServis, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="Login" />
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding Log, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="Password"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding Pass, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="URI"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding URI, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Button Content="Add" Margin="10,5" Command="{Binding AddPassCOmmand}"></Button>
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,310,0,0">
+                    <StackPanel >
+                        <ListView Foreground="Black">
+                            <ListViewItem Height="60">
+                                <StackPanel Orientation="Horizontal">
+                                    <materialDesign:PackIcon  Kind="ViewDashboard" Width="25" Height="25" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Update" VerticalAlignment="Center" Margin="20,10"></TextBlock>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                        <Label FontSize="15" Content="Web Servis"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding SelectedPassword.WebSerwise, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="Login" />
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding SelectedPassword.Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="Password"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding SelectedPassword.PassWor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label FontSize="15" Content="URI"/>
+                        <TextBox FontSize="12" Margin="10,0,10,0" Background="Wheat" Text="{Binding SelectedPassword.Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    </StackPanel>
+                </Grid>
+               
             </Grid>
-            <Grid Margin="200,60,0,0">
+            <Grid Margin="200,60,0,40">
                 <ListBox ItemsSource="{Binding Passwords}"
-                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         SelectedItem="{Binding SelectedPassword}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Margin="5">
-                                <Image  Width="70" Height="70"
+                                <Image  Width="120" Height="120"
                                        Source="{Binding Uri}">
                                 </Image>
-                                <TextBlock Name="_parameter" Text="{Binding PassWor}" FontSize="20"></TextBlock>
-                                <TextBlock Text="{Binding WebSerwise}" FontSize="15"></TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontStyle="Italic" FontWeight="Bold" FontSize="18" Content="Web Serwis: "/>
+                                    <TextBlock VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Text="{Binding WebSerwise}" 
+                                               FontSize="15"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontStyle="Italic" FontWeight="Bold" FontSize="18" Content="Login: "/>
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding Login}"
+                                        FontSize="15"></TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label FontStyle="Italic" FontWeight="Bold" FontSize="18" Content="Password: "/>
+                                    <TextBlock 
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        Text="{Binding PassWor}" 
+                                        FontSize="15"></TextBlock>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -118,6 +122,15 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
+            </Grid>
+            <Grid Margin="200,560,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Content="Delete" Margin="30,2,30,2" Command="{Binding DeleteCOmmand}"></Button>
+                <Button Grid.Column="0" Content="Save Update" Margin="30,2,30,2" Command="{Binding SaveUpdate}"></Button>
             </Grid>
         </Grid>
     </Grid>
