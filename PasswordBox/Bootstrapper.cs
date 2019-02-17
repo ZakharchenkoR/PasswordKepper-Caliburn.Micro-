@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using PasswordBox.ViewModels;
+using PasswordBox.Infrasrtucture;
+using PasswordBox.Models;
 
 namespace PasswordBox
 {
@@ -24,6 +26,9 @@ namespace PasswordBox
             simpleContainer.Singleton<IWindowManager, WindowManager>();
             simpleContainer.Singleton<IEventAggregator, EventAggregator>();
             simpleContainer.PerRequest<StartViewModel, StartViewModel>();
+            simpleContainer.Singleton<IIDSaver, JSONIDSaver>();
+            simpleContainer.Singleton<IDLoader, JSONIDLoader>();
+            simpleContainer.Singleton<IEncoder, PasswordBox.Models.Encoder>();
         }
 
         protected override void BuildUp(object instance)

@@ -15,7 +15,7 @@
             <i:InvokeCommandAction  Command="{Binding LoadCommand}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Grid Background="LightGray">
+    <Grid Background="LightBlue">
         <Grid>
             <Grid Height="60" VerticalAlignment="Top" Background="#FF012585">
                 <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
@@ -24,9 +24,7 @@
                                          PlacementMode="BottomAndAlignRightEdges" 
                                      StaysOpen="False" Foreground="#FFF9F3F3">
                         <StackPanel Width="150">
-                            <Button Content="Account"></Button>
                             <Button Content="Add" Command="{Binding AddPassCOmmand}"></Button>
-                            <Button Content="Log Out"></Button>
                             <Separator></Separator>
                             <Button Content="Exit" Command="{Binding CLoseCommand}" >
                             </Button>
@@ -121,6 +119,13 @@
                             <WrapPanel></WrapPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding CopyPassword}" Header="Copy Password"></MenuItem>
+                            <MenuItem Command="{Binding CopyLogin}" Header="Copy Login"></MenuItem>
+
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
                 </ListBox>
             </Grid>
             <Grid Margin="200,560,0,0">

@@ -1,11 +1,9 @@
 ﻿using Infrastructure;
-using Newtonsoft.Json;
 using PasswordBox.Infrasrtucture;
 using PasswordBox.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,8 +14,9 @@ namespace PasswordBox.ViewModels
 {
     class ClientViewModel:BaseNotify
     {
-        IRepository passwordRepository;
-
+        private IRepository passwordRepository;
+        private IPasswordKeeperSaver passwordKeeperSaver;
+        private IPasswordKepperLoader passwordKepperLoader;
         #region Properties
         private ObservableCollection<Password> passwords;
         public ObservableCollection<Password> Passwords
@@ -78,9 +77,11 @@ namespace PasswordBox.ViewModels
         public ICommand DeleteCOmmand { get; set; }
         public ICommand LoadCommand { get; set; }
         public ICommand SaveUpdate { get; set; }
+        public ICommand CopyPassword { get; set; }
+        public ICommand CopyLogin { get; set; }
         #endregion
 
-        public ClientViewModel()
+        public ClientViewModel(IPasswordKeeperSaver saver,IPasswordKepperLoader loader)
         {
             CLoseCommand = new RelayCommand(CloseApplication);
             passwordRepository = new Repository();
@@ -89,6 +90,10 @@ namespace PasswordBox.ViewModels
             Passwords = new ObservableCollection<Password>();
             DeleteCOmmand = new RelayCommand(Delete);
             SaveUpdate = new RelayCommand(Save);
+            CopyPassword = new RelayCommand(CopyPass);
+            CopyLogin = new RelayCommand(CopyLog);
+            passwordKeeperSaver = saver;
+            passwordKepperLoader = loader;
         }
 
         #region Methods
@@ -98,9 +103,19 @@ namespace PasswordBox.ViewModels
             Application.Current.Shutdown();
         }
 
+        public void CopyPass(object a)
+        {
+            Clipboard.SetText(SelectedPassword.PassWor);
+        }
+
+        public void CopyLog(object a)
+        {
+            Clipboard.SetText(SelectedPassword.Login);
+        }
+
         private void Save(object a)
         {
-            passwordKeepers = JsonConvert.DeserializeObject<List<PasswordKeeper>>(File.ReadAllText("PasswordKepper.json"));
+            passwordKeepers = passwordKepperLoader.Load();
             Singleton singleton = Singleton.GetInstance();
             foreach (var item in passwordKeepers)
             {
@@ -108,8 +123,7 @@ namespace PasswordBox.ViewModels
                 {
 
                     item.Passwords = this.Passwords;
-                    string content = JsonConvert.SerializeObject(passwordKeepers);
-                    File.WriteAllText("PasswordKepper.json", content, Encoding.Default);
+                    passwordKeeperSaver.Save(passwordKeepers);
                     MessageBox.Show("Updates is saver");
                     break;
                 }
@@ -121,7 +135,7 @@ namespace PasswordBox.ViewModels
             Passwords.Remove(SelectedPassword);
             Passwords = new ObservableCollection<Password>(Passwords);
 
-            passwordKeepers = JsonConvert.DeserializeObject<List<PasswordKeeper>>(File.ReadAllText("PasswordKepper.json"));
+            passwordKeepers = passwordKepperLoader.Load();
             Singleton singleton = Singleton.GetInstance();
             foreach (var item in passwordKeepers)
             {
@@ -129,8 +143,7 @@ namespace PasswordBox.ViewModels
                 {
 
                     item.Passwords = this.Passwords;
-                    string content = JsonConvert.SerializeObject(passwordKeepers);
-                    File.WriteAllText("PasswordKepper.json", content, Encoding.Default);
+                    passwordKeeperSaver.Save(passwordKeepers);
                     break;
                 }
             }
@@ -138,7 +151,7 @@ namespace PasswordBox.ViewModels
 
         private void Load(object a)
         {
-            passwordKeepers = JsonConvert.DeserializeObject<List<PasswordKeeper>>(File.ReadAllText("PasswordKepper.json"));
+            passwordKeepers = passwordKepperLoader.Load();
             Singleton singleton = Singleton.GetInstance();
             foreach (var item in passwordKeepers)
             {
@@ -146,7 +159,6 @@ namespace PasswordBox.ViewModels
                 {
                  
                     Passwords = item.Passwords;
-                    MessageBox.Show(item.ID.ToString());
                     break;
                 }
             }
@@ -155,9 +167,9 @@ namespace PasswordBox.ViewModels
         private void AddPassword(object a)
         {
             Password passw = new Password { WebSerwise = this.WebServis, Login = this.Log, PassWor = this.Pass, Uri = this.URI };
-             Passwords.Add(passw);
-             Passwords = new ObservableCollection<Password>(Passwords);
-            passwordKeepers = JsonConvert.DeserializeObject<List<PasswordKeeper>>(File.ReadAllText("PasswordKepper.json"));
+            Passwords.Add(passw);
+            Passwords = new ObservableCollection<Password>(Passwords);
+            passwordKeepers = passwordKepperLoader.Load();
             Singleton singleton = Singleton.GetInstance();
             foreach (var item in passwordKeepers)
             {
@@ -165,8 +177,11 @@ namespace PasswordBox.ViewModels
                 {
 
                     item.Passwords.Add(passw);
-                    string content = JsonConvert.SerializeObject(passwordKeepers);
-                    File.WriteAllText("PasswordKepper.json", content, Encoding.Default);
+                    passwordKeeperSaver.Save(passwordKeepers);
+                    this.WebServis = String.Empty;
+                    this.Log = String.Empty;
+                    this.Pass = String.Empty;
+                    this.URI = String.Empty;
                     break;
                 }
             }
